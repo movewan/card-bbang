@@ -41,7 +41,9 @@ export async function joinRoom(
     .select('*', { count: 'exact', head: true })
     .eq('room_id', typedRoom.id)
 
-  if (count !== null && count >= 4) {
+  const playerCount = count ?? 0
+
+  if (playerCount >= 4) {
     console.error('Room is full')
     return null
   }
@@ -67,7 +69,7 @@ export async function joinRoom(
 
   const typedPlayer = player as Player
 
-  if (count === 0 || count === null) {
+  if (playerCount === 0) {
     await supabase
       .from('game_rooms')
       .update({ host_player_id: typedPlayer.id })
